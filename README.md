@@ -1,5 +1,5 @@
 # cordova-screengod
-True cross-platform CSS for apache cordova made easy
+Fixes your cordova screen resolution and media query problems.
 
 The problem
 -----------
