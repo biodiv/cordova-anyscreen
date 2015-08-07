@@ -8,13 +8,18 @@ Mobile Browsers, especially across Android 2.3-4.4, handle ```mediaQueries``` di
 The solution
 ------------
 Write as much responsive css as possible, avoid pixel values whenever possible.
+
+Put ```screengod.js``` into your ```index.html```
+
+    <script type="text/javascript" src="path/to/screengod.js"></script>
+
 Move all pixel definitions into a second css file, e.g.
 
     html {
       font-size:16px;
     }
 
-into
+into e.g.
 
     screengod.css
     
