@@ -4,6 +4,10 @@
 */
 function screengod(css_urls, successCallback){
 	
+	if (typeof window["app"] == "undefined"){
+		app = {};
+	}
+	
 	/* the larger side ALWAYS is called 'height' */
 	if (screen.width > screen.height) {
         app.deviceHeight = screen.width;
