@@ -3,7 +3,7 @@ Fixes your cordova screen resolution and media query problems.
 
 The problem
 -----------
-Mobile Browsers, especially across Android 2.3-4.4, handle ```mediaQueries``` differently. Some ignore ```-webkit-device-pixel-ratio```, some use it as a multiplier of a given ```-device-height```, some not. Furthermore, the amount of screens is enromous with new screen definitions emerging all the time. IE again differs. While one should program responsive css, you sometimes might want to use ```pixels``` for ```padding``` or ```margin``` or for the root elements ```font-size```, which other ```rem``` or ```em``` values depend on. We cannot use ```vh``` etc. yet as it is not supported by older devices.
+Mobile Browsers, especially across Android 2.3-4.4, handle ```mediaQueries``` differently. Some ignore ```-webkit-device-pixel-ratio```, some use it as a multiplier of a given ```-device-height```, some not. Sometimes you get a low resolution by default although you have a highres device. Furthermore, the amount of screens is enromous with new screen definitions emerging all the time. IE again differs. While one should program responsive css, you sometimes might want to use ```pixels``` for ```padding``` or ```margin``` or for the root elements ```font-size```, which other ```rem``` or ```em``` values depend on. We cannot use ```vh``` etc. yet as it is not supported by older devices.
 
 The solution
 ------------
