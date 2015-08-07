@@ -20,9 +20,11 @@ into
     
 Instead of linking your css file in the ```<head>``` tag, load it after your device is ready with
 
-    screengod(['path/to/screengod.css']);
+    screengod(['path/to/screengod.css'],function(){
+        /* do your stuff */
+    });
     
-and you're done. screengod also maps physical pixels to software pixels, giving you the full resolution of your device and the following readable values:
+and you're done. You can pass as many css filepaths as you want. screengod also maps physical pixels to software pixels, giving you the full resolution of your device and the following readable values:
 
     app.deviceHeight  // the true height of your DEVICEs screen in pixels
     app.deviceWidth  // the true width of your DEVICEs screen in pixels 
@@ -31,7 +33,7 @@ and you're done. screengod also maps physical pixels to software pixels, giving 
 
 What you get
 ------------
-All your elements will look exactly the same across all platforms, all screens.
+All your elements will look exactly the same across all platforms, all screens. All your apps will have the full resolution of the device.
 
 Platform support
 ----------------
