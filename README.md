@@ -42,7 +42,7 @@ All your elements will look exactly the same across all platforms, all screens. 
 
 Platform support
 ----------------
-- iOS 6+
+- iOS 6,7,8
 - Android 2.3, 4.x, 5.x
 - Windows Phone 8.x (windows 10 coming soon)
 
