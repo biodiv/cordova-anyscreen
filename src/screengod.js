@@ -231,3 +231,31 @@ function adaptCSS(str) {
     
     return new_css_str;
 }
+
+/* winjs compatibility */
+function setInnerHTML(container, html) {
+
+    if (device.platform == "windows") {
+        MSApp.execUnsafeLocalFunction(function () {
+            container.innerHTML = html;
+
+        });
+    }
+    else {
+        container.innerHTML = html;
+    }
+}
+
+function insertAdjacentHTML(location, html, container) {
+
+    if (device.platform == "windows") {
+        MSApp.execUnsafeLocalFunction(function () {
+            container.insertAdjacentHTML(location, html);
+
+        });
+    }
+    else {
+        container.insertAdjacentHTML(location, html);
+    }
+
+}
