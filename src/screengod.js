@@ -218,7 +218,7 @@ function adaptCSS(str) {
 	   					}
 	   				}
 	   				
-	   				new_css_str += new_val;
+	   				new_css_str += new_val + ";";
 
                     valOpen = false;
                     keyBuff = buff = "";
