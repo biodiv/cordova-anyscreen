@@ -49,3 +49,9 @@ Platform support
 How to set pixel sizes
 ----------------------
 ```1px``` is one pixel on a device with ```1080px``` width and ```>=1920px``` height, so this is your starting point.
+
+How it works
+------------
+First, it attempts to map your software resolution to the devices native resolution.
+Second, it measures if the attempt was successful and gets the available dimensions in pixels.
+Finally, it scales your css values to the actual solution.
