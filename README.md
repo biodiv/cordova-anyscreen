@@ -55,3 +55,7 @@ How it works
 First, it attempts to map your software resolution to the devices native resolution.
 Second, it measures if the attempt was successful and gets the available dimensions in pixels.
 Finally, it scales your css values to the actual solution.
+
+Why media queries are the wrong approach anyway
+-----------------------------------------------
+Media queries are intended to deliver different layouts, not for delivering the same layout. One would definitely use them for targeting portrait/landscape adaptations. In most cases it makes sense that your app looks the same across all resolutions, like done in native programming. And you should not have to bother about this. You should just program one design/layout and the software should adapt it automatically to look the same.
