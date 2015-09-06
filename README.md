@@ -9,7 +9,7 @@ The solution
 ------------
 Write as much responsive css as possible, avoid pixel values whenever possible.
 
-Set ```html``` and ```body``` in you css file to ```100%```:
+Set ```html``` and ```body``` in your css file to ```100%```:
 
     html, body {
         width: 100%;
