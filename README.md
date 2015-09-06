@@ -9,6 +9,13 @@ The solution
 ------------
 Write as much responsive css as possible, avoid pixel values whenever possible.
 
+Set ```html``` and ```body``` in you css file to ```100%```:
+
+    html, body {
+        width: 100%;
+        height: 100%;
+    }
+
 Put ```screengod.js``` into your ```index.html```
 
     <script type="text/javascript" src="path/to/screengod.js"></script>
