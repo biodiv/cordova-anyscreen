@@ -30,7 +30,7 @@ into e.g.
 
     screengod.css
     
-Instead of linking your css file in the ```<head>``` tag, load it after your device is ready with
+This file may not contain comments. Instead of linking your css file in the ```<head>``` tag, load it after your device is ready with
 
     screengod(['path/to/screengod.css'],function(){
         /* do your stuff */
