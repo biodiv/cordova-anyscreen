@@ -1,8 +1,7 @@
-/*
- * VERSION: beta 0.1
+﻿/*
  * 1px = 1px on a screen width width=1080px, while 1080px is the smaller side (e.g. 1080*1920)
 */
-function screengod(css_urls, successCallback){
+function initscreen(css_urls, successCallback){
 	
 	if (typeof window["app"] == "undefined"){
 		app = {};
@@ -20,11 +19,14 @@ function screengod(css_urls, successCallback){
     
     /* try to fix screens */
     var dpr = window.devicePixelRatio;
+
+	var viewport = document.createElement("meta");
+	viewport.setAttribute("name","viewport");
     
     if (device.platform == "iOS" || device.platform == "Android"){
     	var version = parseFloat(device.version.slice(0,3));
     	
-    	var viewport = document.querySelector("meta[name=viewport]");
+    	//var viewport = document.querySelector("meta[name=viewport]");
 
         var scaling = 1/dpr;
 
@@ -60,8 +62,8 @@ function screengod(css_urls, successCallback){
         if (dpr > 1) {
             
             /* this always works on IE11 */
-            app.deviceHeight = Math.floor(init_deviceHeight * dpr);
-            app.deviceWidth = Math.floor(init_deviceWidth * dpr);
+            app.deviceHeight = Math.floor(app.deviceHeight * dpr);
+            app.deviceWidth = Math.floor(app.deviceWidth * dpr);
 
             var msViewportStyle = document.createElement("style");
 
@@ -71,9 +73,23 @@ function screengod(css_urls, successCallback){
 
             msViewportStyle.appendChild(cssText);
 
-            document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+            document.head.appendChild(msViewportStyle);
+
+			viewport.setAttribute("content","user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, target-densitydpi=device-dpi");
         }
     }
+
+	if (device.platform == "Linux") {
+		//var scaling = 1/dpr;
+		//var viewport = document.querySelector("meta[name=viewport]");
+		//viewport.setAttribute('content', 'user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height');
+		app.deviceHeight = Math.max(document.body.clientWidth, document.body.clientHeight);
+        app.deviceWidth = Math.min(document.body.clientWidth, document.body.clientHeight);
+		viewport.setAttribute("content","user-scalable=no");
+	}
+	
+	document.head.appendChild(viewport);
+	
     
     /* measure truly available sizes */
     app.containerWidth = Math.min(document.body.clientWidth,document.body.clientHeight);
@@ -157,10 +173,48 @@ function adaptCSS(str) {
 
     var valOpen = false;
 
+
+	var mqueryOpen = false;
+	var mqueryTagOpen = false;
+	var mqueryBuff = "";
+
     for(var i in str) {
         var pol = str[i];
 
         if(pol=="\t") continue;
+
+		if (pol == "@"){
+			mqueryOpen = true;
+			mqueryTagOpen = true;
+			buff += pol;
+			continue;
+		}
+
+		if (mqueryOpen){
+			if(mqueryTagOpen){
+				if(pol == "{"){
+					mqueryBuff = buff;
+					buff = "";
+					mqueryTagOpen = false;
+
+					new_css_str += mqueryBuff + "{";
+
+					continue;
+				}
+			}
+			if (!blockOpen) {
+				if(pol == "}" ){
+				
+					mqueryOpen = false;
+					mqueryBuff = "";
+
+					new_css_str += "}";
+
+					continue;
+				
+				}
+			}
+		}
 
         if(pol == "{")
         {        	
@@ -199,8 +253,6 @@ function adaptCSS(str) {
 
                     var obj = {key:keyBuff, value:buff, selector:selBuff};
                     
-                    
-                    
                     var new_val = "";
 	   				var val_parts = buff.split(" ");
 	   				
@@ -209,7 +261,16 @@ function adaptCSS(str) {
 	   					
 	   					if (val_part.indexOf("px") > 0){
 	   						var number_value = parseInt(val_part.substr(0, val_part.length - 2));
-	   						var new_pixel_value = Math.floor((number_value/1080)*app.deviceWidth) + "px";
+							if (keyBuff == "height"){
+								var new_pixel_value_floored = Math.floor((number_value/1920)*app.containerHeight);
+							}
+							else if (keyBuff == "width"){
+								var new_pixel_value_floored = Math.floor((number_value/1080)*app.containerWidth);
+							}
+							else {
+	   							var new_pixel_value_floored = Math.floor((number_value/1080)*app.containerWidth);
+							}
+							var new_pixel_value = new_pixel_value_floored == 0 ? "1px" : new_pixel_value_floored + "px";
 	   						
 	   						new_val += new_pixel_value + " ";
 	   					}
@@ -230,32 +291,5 @@ function adaptCSS(str) {
     }
     
     return new_css_str;
-}
-
-/* winjs compatibility */
-function setInnerHTML(container, html) {
-
-    if (device.platform == "windows") {
-        MSApp.execUnsafeLocalFunction(function () {
-            container.innerHTML = html;
-
-        });
-    }
-    else {
-        container.innerHTML = html;
-    }
-}
-
-function insertAdjacentHTML(location, html, container) {
-
-    if (device.platform == "windows") {
-        MSApp.execUnsafeLocalFunction(function () {
-            container.insertAdjacentHTML(location, html);
-
-        });
-    }
-    else {
-        container.insertAdjacentHTML(location, html);
-    }
-
+	
 }
