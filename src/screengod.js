@@ -113,7 +113,14 @@ function initscreen(css_urls, successCallback){
 		   			adapted_css_str = adaptCSS(xhr.responseText);
 					
 					var styleNode = document.createElement("style");
-					setInnerHTML(styleNode, adapted_css_str);
+					if (device.platform == "windows") {
+						MSApp.execUnsafeLocalFunction(function () {
+							styleNode.innerHTML = adapted_css_str;
+						});
+					}
+					else {
+						styleNode.innerHTML = adapted_css_str;
+					}
 					document.body.appendChild(styleNode);
     					
 		            iterate();
