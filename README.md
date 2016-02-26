@@ -16,9 +16,9 @@ Set ```html``` and ```body``` in your css file to ```100%```:
         height: 100%;
     }
 
-Put ```screengod.js``` into your ```index.html```
+Put ```anyscreen.js``` into your ```index.html```
 
-    <script type="text/javascript" src="path/to/screengod.js"></script>
+    <script type="text/javascript" src="path/to/anyscreen.js"></script>
 
 Move all pixel definitions into a second css file, e.g.
 
@@ -28,15 +28,15 @@ Move all pixel definitions into a second css file, e.g.
 
 into e.g.
 
-    screengod.css
+    anyscreen.css
     
 This file may not contain comments. Instead of linking your css file in the ```<head>``` tag, load it after your device is ready with
 
-    screengod(['path/to/screengod.css'],function(){
+    anyscreen(['path/to/anyscreen.css'],function(){
         /* do your stuff */
     });
     
-and you're done. You can pass as many css filepaths as you want. screengod also maps physical pixels to software pixels, giving you the full resolution of your device and the following readable values:
+and you're done. You can pass as many css filepaths as you want. anyscreen also maps physical pixels to software pixels, giving you the full resolution of your device and the following readable values:
 
     app.deviceHeight  // the true height of your DEVICEs screen in pixels
     app.deviceWidth  // the true width of your DEVICEs screen in pixels 
