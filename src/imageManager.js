@@ -1,12 +1,3 @@
-﻿/* polyfill for integer check */
-Number.isInteger = Number.isInteger || function(value) {
-    return typeof value === "number" && 
-           isFinite(value) && 
-           Math.floor(value) === value;
-};
-
-var imgFolder = 'img/WVGA/';
-	
 function imageManager() {
 	
     /* select image folder AFTER scaling and checking with screengod */
