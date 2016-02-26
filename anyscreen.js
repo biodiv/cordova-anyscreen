@@ -87,7 +87,7 @@ function anyscreen(css_urls, successCallback){
         app.deviceHeight = app.deviceHeight * dpr;
         app.deviceWidth = app.deviceWidth * dpr;
     }
-    else{
+    else {
         console.log("error rescaling screen");
     }    	
 	
@@ -100,13 +100,13 @@ function anyscreen(css_urls, successCallback){
 
 		var imgFolder = "img/640up";
 
-		if (app.deviceWidth >= 1440){
+		if (app.deviceWidth >= 1440) {
 			imgFolder = "img/1440up/";
 		}
-		else if (app.deviceWidth >= 1080){
+		else if (app.deviceWidth >= 1080) {
 			imgFolder = "img/1080up/";
 		}
-		else if (app.deviceWidth >= 720){
+		else if (app.deviceWidth >= 720) {
 			imgFolder = "img/720up/";
 		}
 		else if (app.deviceWidth >= 640) {
@@ -128,7 +128,7 @@ function anyscreen(css_urls, successCallback){
      * now app.deviceHeight, app.deviceWidth, app.containerWidth, app.containerHeight are set
     */
 	
-	quickWorkingLoop(css_urls, function(url, iterate){
+	quickWorkingLoop(css_urls, function(url, iterate) {
 		
 		xhr = new XMLHttpRequest;
 		xhr.onreadystatechange = function () {
@@ -169,7 +169,7 @@ function anyscreen(css_urls, successCallback){
 }
 
 
-function quickWorkingLoop(data, onIter,finishedCB){
+function quickWorkingLoop(data, onIter,finishedCB) {
 	var index = -1,
 		dataCount = data.length;
 	
@@ -185,7 +185,7 @@ function quickWorkingLoop(data, onIter,finishedCB){
 			
 		}
 		else{
-			if (typeof finishedCB == 'function'){
+			if (typeof finishedCB == 'function') {
 				finishedCB();
 			}
 		}
@@ -214,21 +214,21 @@ function adaptCSS(str) {
 	var mqueryTagOpen = false;
 	var mqueryBuff = "";
 
-    for(var i in str) {
+    for (var i in str) {
         var pol = str[i];
 
-        if(pol=="\t") continue;
+        if (pol=="\t") continue;
 
-		if (pol == "@"){
+		if (pol == "@") {
 			mqueryOpen = true;
 			mqueryTagOpen = true;
 			buff += pol;
 			continue;
 		}
 
-		if (mqueryOpen){
-			if(mqueryTagOpen){
-				if(pol == "{"){
+		if (mqueryOpen) {
+			if (mqueryTagOpen) {
+				if (pol == "{") {
 					mqueryBuff = buff;
 					buff = "";
 					mqueryTagOpen = false;
@@ -239,7 +239,7 @@ function adaptCSS(str) {
 				}
 			}
 			if (!blockOpen) {
-				if(pol == "}" ){
+				if (pol == "}" ) {
 				
 					mqueryOpen = false;
 					mqueryBuff = "";
@@ -252,8 +252,7 @@ function adaptCSS(str) {
 			}
 		}
 
-        if(pol == "{")
-        {        	
+        if (pol == "{") {        	
             blockOpen = true;
             selBuff = buff;
             buff = "";
@@ -263,18 +262,16 @@ function adaptCSS(str) {
             continue;
         }
 
-        if(blockOpen)
-        {
-            if(pol == "}")
-            {
+        if (blockOpen) {
+        	
+            if (pol == "}") {
                 blockOpen = valOpen = false;
                 selBuff = keyBuff = buff = "";
                 new_css_str += "}";
                 continue;
             }
 
-            if(!valOpen)
-            {
+            if (!valOpen) {
                 if(pol == ":") {
                     valOpen = true;
                     keyBuff = buff;
@@ -285,7 +282,7 @@ function adaptCSS(str) {
             }
             else
             {
-                if(pol == "\n" || pol==";" || str[i] == "}"){
+                if (pol == "\n" || pol==";" || str[i] == "}") {
 
                     var obj = {key:keyBuff, value:buff, selector:selBuff};
                     
