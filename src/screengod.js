@@ -1,7 +1,7 @@
 ﻿/*
  * 1px = 1px on a screen width width=1080px, while 1080px is the smaller side (e.g. 1080*1920)
 */
-function initscreen(css_urls, successCallback){
+function anyscreen(css_urls, successCallback){
 	
 	if (typeof window["app"] == "undefined"){
 		app = {};
@@ -38,23 +38,6 @@ function initscreen(css_urls, successCallback){
         }
         
         viewport.setAttribute('content', 'user-scalable=no, initial-scale=' + initscale + ', maximum-scale=' + scaling + ', minimum-scale=' + scaling + ', target-densitydpi=device-dpi');
-        
-        /* measure available width & check if app.deviceWidth app.deviceHeight need adjustments */
-        var measuredContainerWidth = Math.min(document.body.clientWidth,document.body.clientHeight),
-        	calculatedContainerWidth = app.deviceWidth * dpr;
-        
-        /* measuredwidth/calculatedWidth = congruence in % as decimal number */
-        var congruence = Math.min(measuredContainerWidth,calculatedContainerWidth) / Math.max(measuredContainerWidth,calculatedContainerWidth);
-        
-		/* adjust app.deviceHeight app.deviceWidth if necessary */
-        if (calculatedContainerWidth == measuredContainerWidth || congruence > 0.9){
-        		
-            app.deviceHeight = app.deviceHeight * dpr;
-            app.deviceWidth = app.deviceWidth * dpr;
-        }
-        else{
-            //alert("error rescaling screen");
-        }    	
     	
     }
     else if (device.platform == "windows") {
@@ -89,11 +72,57 @@ function initscreen(css_urls, successCallback){
 	}
 	
 	document.head.appendChild(viewport);
-	
+
+	// After adding viewport perform some checks
+
+	/* measure available width & check if app.deviceWidth app.deviceHeight need adjustments */
+    var measuredContainerWidth = Math.min(document.body.clientWidth,document.body.clientHeight),
+    	calculatedContainerWidth = app.deviceWidth * dpr;
     
+    /* measuredwidth/calculatedWidth = congruence in % as decimal number */
+    var congruence = Math.min(measuredContainerWidth,calculatedContainerWidth) / Math.max(measuredContainerWidth,calculatedContainerWidth);
+
+	/* adjust app.deviceHeight app.deviceWidth if necessary */
+    if (calculatedContainerWidth == measuredContainerWidth || congruence > 0.9){
+        app.deviceHeight = app.deviceHeight * dpr;
+        app.deviceWidth = app.deviceWidth * dpr;
+    }
+    else{
+        console.log("error rescaling screen");
+    }    	
+	
     /* measure truly available sizes */
     app.containerWidth = Math.min(document.body.clientWidth,document.body.clientHeight);
     app.containerHeight = Math.max(document.body.clientWidth,document.body.clientHeight);
+
+	/* create handlebars helper if handlebars is present */
+	if (typeof window.Handlebars != "undefined" && window.Handlebars != null){
+
+		var imgFolder = "img/640up";
+
+		if (app.deviceWidth >= 1440){
+			imgFolder = "img/1440up/";
+		}
+		else if (app.deviceWidth >= 1080){
+			imgFolder = "img/1080up/";
+		}
+		else if (app.deviceWidth >= 720){
+			imgFolder = "img/720up/";
+		}
+		else if (app.deviceWidth >= 640) {
+			imgFolder = "img/640up/";
+		}
+		else if (app.deviceWidth >= 400) {
+			imgFolder = "img/400up/";
+		}
+		else {
+			imgFolder = "img/low/";
+		}
+
+		 Handlebars.registerHelper("imgFolder", function () {
+		    return imgFolder;
+		});
+	}
     
     /*
      * now app.deviceHeight, app.deviceWidth, app.containerWidth, app.containerHeight are set
@@ -104,8 +133,6 @@ function initscreen(css_urls, successCallback){
 		xhr = new XMLHttpRequest;
 		xhr.onreadystatechange = function () {
 	    	
-	    	console.log('xhr state: ' + xhr.readyState);
-	    	
 	        if (xhr.readyState == 4) {
 	        	
 		        if (xhr.status == 200 || xhr.status == 0 ) {
@@ -113,6 +140,7 @@ function initscreen(css_urls, successCallback){
 		   			adapted_css_str = adaptCSS(xhr.responseText);
 					
 					var styleNode = document.createElement("style");
+
 					if (device.platform == "windows") {
 						MSApp.execUnsafeLocalFunction(function () {
 							styleNode.innerHTML = adapted_css_str;
@@ -121,12 +149,13 @@ function initscreen(css_urls, successCallback){
 					else {
 						styleNode.innerHTML = adapted_css_str;
 					}
+
 					document.body.appendChild(styleNode);
     					
 		            iterate();
 	        	}
 	        	else {
-	        		alert("[screengod] css file not found!");
+	        		alert("[screengod] css file not found : " + url);
 	        	}
 
 	        }
@@ -268,18 +297,22 @@ function adaptCSS(str) {
 	   					
 	   					if (val_part.indexOf("px") > 0){
 	   						var number_value = parseInt(val_part.substr(0, val_part.length - 2));
-							if (keyBuff == "height"){
-								var new_pixel_value_floored = Math.floor((number_value/1920)*app.containerHeight);
-							}
-							else if (keyBuff == "width"){
-								var new_pixel_value_floored = Math.floor((number_value/1080)*app.containerWidth);
+
+							if (number_value != 0){
+
+								if (keyBuff == "height"){
+									var new_pixel_value_floored = Math.floor((number_value/1920)*app.containerHeight);
+								}
+								else {
+		   							var new_pixel_value_floored = Math.floor((number_value/1080)*app.containerWidth);
+								}
+								var new_pixel_value = new_pixel_value_floored == 0 ? "1px" : new_pixel_value_floored + "px";
+		   						
+		   						new_val += new_pixel_value + " ";
 							}
 							else {
-	   							var new_pixel_value_floored = Math.floor((number_value/1080)*app.containerWidth);
+								new_val += "0px ";
 							}
-							var new_pixel_value = new_pixel_value_floored == 0 ? "1px" : new_pixel_value_floored + "px";
-	   						
-	   						new_val += new_pixel_value + " ";
 	   					}
 	   					else {
 	   						new_val += val_part + " ";
