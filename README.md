@@ -1,4 +1,4 @@
-# cordova-screengod
+# cordova-anyscreen
 Fixes your cordova screen resolution and media query problems.
 
 The problem
